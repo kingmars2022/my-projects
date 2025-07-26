@@ -46,6 +46,7 @@ We found 45 unique words and the max size of our words array is 64.
 When, in, Rome, Do, as, the, Romans, Practice, makes, ...
 
 File Structure
+```text
 prj/
 ├── a3/
 │   └── UniqueWords.java
@@ -55,6 +56,7 @@ prj/
 ├── config.xml
 ├── example1.txt
 └── example2.txt
+```
 
 
 Notes
