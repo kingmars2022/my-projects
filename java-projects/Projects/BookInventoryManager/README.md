@@ -43,8 +43,10 @@ A console-based Java application that manages a bookstore's inventory using obje
 ## How to Run
 
 1. Compile all `.java` files:
+
    ```bash
 javac *.java
+```
 
 2.Run the main program:
 java BookInventoryManager
