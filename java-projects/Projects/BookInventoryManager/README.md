@@ -44,7 +44,7 @@ A console-based Java application that manages a bookstore's inventory using obje
 
 1. Compile all `.java` files:
 
-   ```text
+```bash
 javac *.java
 ```
 
