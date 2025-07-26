@@ -1,0 +1,22 @@
+<config>
+	<test driver="driver.Driver" method="main" label="Assignment 3: Dynamic Word List!">
+		<args>example1.txt</args>
+		<mark grade="40">
+			<check label="Is your count correct?"><regex>We found 45 unique words and the max size of our words array is 64.</regex></check>
+		</mark>
+		<mark grade="10">
+			<check label="Is your output correct?"><regex>
+When, in, Rome, Do, as, the, Romans, Practice, makes, perfect, Where, there, is, a, will, way, was, not, built, day, Spice, of, life, It, always, darkest, before, dawn, Actions, speak, louder, than, words, You, cannot, book, judge, under, cover, If, at, first, succeed, try, again</regex></check>
+		</mark>
+	</test>
+	<test driver="driver.Driver" method="main" label="Assignment 3: Dynamic Word List!">
+		<args>example2.txt</args>
+		<mark grade="40">
+			<check label="Is your count correct?"><regex>We found 46 unique words and the max size of our words array is 64.</regex></check>
+		</mark>
+		<mark grade="10">
+			<check label="Is your output correct?"><regex>
+Necessity, is, the, mother, of, invention, Do, unto, others, as, you, would, have, them, cannot, book, a, judge, under, cover, Where, there, will, way, early, bird, catches, worm, Two, heads, are, same, Waste, not, want, Pride, comes, before, fall, Laughter, best, medicine, squeaky, wheel, gets, grease</regex></check>
+		</mark>
+	</test>
+</config>

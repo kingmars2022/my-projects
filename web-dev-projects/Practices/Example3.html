@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    padding: 30px;
+  }
+
+  form {
+    background-color: white;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  header {
+    text-align: center;
+    color: blue;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    height: 100px;
+  }
+
+  input[type="radio"] {
+    margin-right: 5px;
+    margin-top: 10px;
+  }
+
+  input[type="submit"] {
+    background-color: orangered;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin-top: 20px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+    background-color: orangered;
+  }
+</style>
+
+<head>
+  <title> ADOPT A CAT </title>
+</head>
+
+<body>
+  <header> ADOPT A CAT </header>
+
+  <label for="name">Full Name</label><br>
+  <input type="text" id="name" name="name" placeholder="Enter your full name"><br></br>
+
+  <label for="email">Email</label><br>
+  <input type="email" id="email" placeholder="Enter your email address"><br></br>
+
+  <label for="phone number">Phone Number</label><br>
+  <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"><br></br>
+
+  <labe for="preferred-cat">Preferred Cat Breed</label><br>
+    <select id="preferred-cat" name="preferred-cat" size = "3">
+      <option value="" disabled selected hidden>Select a breed</option>
+      <option value="none">No Preference</option>
+      <option value="siamese">Siamese</option>
+      <option value="persian">Persian</option>
+    </select><br></br>
+
+    <label>Do you have prior experience with cats:</label><br>
+    <input type="radio" id="exp-yes" name="cat-experience" value="yes"><br>
+    <label for="exp-yes">Yes</label><br>
+    <input type="radio" id="exp-no" name="cat-experience" value="no"><br>
+    <label for="exp-no">No</label><br></br>
+
+    <label for="comments">Additional Comments</label><br>
+    <textarea id="comments" name="comments" placeholder="Write any additional information here..."></textarea><br></br>
+
+    <input type="submit" value="SUBMIT APPLICATION">
+
+
+</body>
+
+</html>

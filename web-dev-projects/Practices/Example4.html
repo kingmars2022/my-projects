@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Club Membership Registration Form</title>
+  <style>
+    body {
+      background-color: #1E90FF;
+      font-family: Arial, sans-serif;
+    }
+
+    .client-input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    form {
+      background-color: #00FFFF;
+      width: 90%;
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 5px;
+      margin-top: 5px;
+    }
+
+    .buttons {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .register-button {
+      background-color: #3b50e0;
+      color: white;
+      padding: 8px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .clear-button {
+      background-color: #999999;
+      color: white;
+      padding: 8px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="text-align:center; color:#003366;">
+    Club Membership Registration Form
+  </h1>
+
+  <form>
+    <label for="fname">First Name:</label>
+    <input type="text" id="fname" name="fname" class="client-input">
+
+    <label for="lname">Last Name:</label>
+    <input type="text" id="lname" name="lname" class="client-input">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" class="client-input">
+
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="dob" class="client-input"><br>
+
+    <label>Gender:</label>
+    <label><input type="radio" name="gender" value="male"> Male</label>
+    <label><input type="radio" name="gender" value="female"> Female</label>
+    <label><input type="radio" name="gender" value="other"> Other</label><br>
+
+    <label>Membership Type:</label>
+    <label><input type="radio" name="membership" value="regular"> Regular</label>
+    <label><input type="radio" name="membership" value="premium"> Premium</label><br>
+
+    <label>Select Your Interests:</label>
+    <label><input type="checkbox" name="interests" value="events"> Events</label>
+    <label><input type="checkbox" name="interests" value="volunteering"> Volunteering</label>
+    <label><input type="checkbox" name="interests" value="workshops"> Workshops</label><br>
+
+    <label for="country">Country:</label>
+    <select id="country" name="country" class="client-input">
+      <option value="canada">Canada</option>
+      <option value="usa">USA</option>
+      <option value="uk">UK</option>
+      <option value="other">Other</option>
+    </select><br>
+
+    <label>
+      <input type="checkbox" name="agree"> I agree to the terms and conditions
+    </label>
+
+    <div class="buttons">
+      <button type="submit" class="register-button">Register</button>
+      <button type="reset" class="clear-button">Clear Form</button>
+    </div>
+  </form>
+
+</body>
+</html>

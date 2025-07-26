@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYVC Database Tables</title>
+    <script>
+// General function to fetch and display table or query data
+function displayData(endpoint, queryName, columnOrder = null) {
+    fetch(`http://localhost:5000/${endpoint}?name=${queryName}`)
+        .then(response => response.json())
+        .then(data => {
+            let tableContent = `<h2>${queryName}</h2><table border='1'><tr>`;
+
+            if (data.length > 0) {
+                // Use columnOrder if defined, else fallback to keys from the first row
+                let columns = columnOrder || Object.keys(data[0]);
+
+                columns.forEach(column => {
+                    tableContent += `<th>${column}</th>`;
+                });
+                tableContent += "</tr>";
+
+                data.forEach(row => {
+                    tableContent += "<tr>";
+                    columns.forEach(column => {
+                        tableContent += `<td>${row[column] || ''}</td>`; // Safeguard in case value is missing
+                    });
+                    tableContent += "</tr>";
+                });
+            } else {
+                tableContent += "<tr><td colspan='100'>No data available</td></tr>";
+            }
+            tableContent += "</table>";
+            document.getElementById("tableDisplay").innerHTML = tableContent;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            document.getElementById("tableDisplay").innerHTML = `<p>Error fetching data for table: ${queryName}</p>`;
+        });
+}
+
+
+      function sendRequest(queryType, queryName) {
+            fetch(`/api/${queryType}/${queryName}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    alert(`Query ${queryName} executed successfully!`);
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert(`Error executing query ${queryName}`);
+                });
+      }
+
+
+
+
+      function deleteLocation() {
+            const locationId = document.getElementById("locationId").value;
+
+            fetch("http://127.0.0.1:5000/delete-location", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ location_id: locationId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.message || data.error;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error: " + error;
+            });
+      }
+
+        function insertLocation() {
+            const data = {
+                type: document.getElementById('type').value,
+                name: document.getElementById('name').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                province: document.getElementById('province').value,
+                postalCode: document.getElementById('postalCode').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                webAddress: document.getElementById('webAddress').value,
+                maxCapacity: parseInt(document.getElementById('maxCapacity').value)
+            };
+
+            fetch("http://127.0.0.1:5000/insert-location", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.message || data.error;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error: " + error;
+            });
+        }
+
+
+        function updateLocation() {
+            const data = {
+                update_locationID: document.getElementById('update_locationID').value,
+                update_name: document.getElementById('update_name').value,
+                update_address: document.getElementById('update_address').value,
+                update_city: document.getElementById('update_city').value,
+                update_maxCapacity: parseInt(document.getElementById('update_maxCapacity').value)
+            };
+
+            fetch("http://127.0.0.1:5000/update-location", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.message || data.error;
+            })
+            .catch(error => {
+                document.getElementById("result").innerText = "Error: " + error;
+            });
+        }
+
+
+
+
+
+
+
+
+               function insertPersonnel() {
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const ssn = document.getElementById("ssn").value;
+            const location_id = document.getElementById("personale_location_id").value;
+            const medicareCard = document.getElementById("medicareCard").value;
+
+            fetch('http://localhost:5000/insertPersonnel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    ssn,
+                    location_id,
+                    medicareCard,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Personnel inserted successfully');
+            })
+            .catch(error => {
+                console.error('Error inserting personnel:', error);
+            });
+        }
+
+        // Function to update personnel
+        function updatePersonnel() {
+            const personnelID = document.getElementById("update_ID").value;
+            const role = document.getElementById("updateRole").value;
+
+            fetch('http://localhost:5000/updatePersonnel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    personnelID,
+                    role
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Personnel updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating personnel:', error);
+            });
+        }
+
+        // Function to delete personnel
+        function deletePersonnel() {
+            const personnelID = document.getElementById("deletePersonnelID").value;
+
+            fetch('http://localhost:5000/deletePersonnel', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    personnelID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Personnel deleted successfully');
+            })
+            .catch(error => {
+                console.error('Error deleting personnel:', error);
+            });
+        }
+
+
+
+
+  function insertFamilyMember() {
+            const FamilyMember_firstName = document.getElementById("FamilyMember_firstName").value;
+            const FamilyMember_lastName = document.getElementById("FamilyMember_lastName").value;
+            const FamilyMember_Relationship = document.getElementById("FamilyMember_Relationship").value;
+            const FamilyMember_ssn = document.getElementById("FamilyMember_ssn").value;
+            const FamilyMember_location_id = document.getElementById("FamilyMember_location_id").value;
+            const FamilyMember_medicareCard = document.getElementById("FamilyMember_medicareCard").value;
+
+            fetch('http://localhost:5000/insertFamilyMember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    FamilyMember_firstName,
+                    FamilyMember_lastName ,
+                    FamilyMember_Relationship ,
+                    FamilyMember_ssn ,
+                    FamilyMember_location_id ,
+                    FamilyMember_medicareCard
+
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('FamilyMember inserted successfully');
+            })
+            .catch(error => {
+                console.error('Error inserting FamilyMember:', error);
+            });
+        }
+
+
+   // Function to update FamilyMember
+        function updateFamilyMember() {
+            const FamilyMember_update_ID = document.getElementById("FamilyMember_update_ID").value;
+            const FamilyMember_updateRole = document.getElementById("FamilyMember_updateRole").value;
+
+            fetch('http://localhost:5000/updateFamilyMember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    FamilyMember_update_ID,
+                    FamilyMember_updateRole
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('FamilyMember updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating FamilyMember:', error);
+            });
+        }
+
+        // Function to delete FamilyMember
+        function deleteFamilyMember() {
+            const deleteFamilyMemberID = document.getElementById("deleteFamilyMemberID").value;
+
+            fetch('http://localhost:5000/deleteFamilyMember', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    deleteFamilyMemberID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('FamilyMember deleted successfully');
+            })
+            .catch(error => {
+                console.error('Error deleting FamilyMember:', error);
+            });
+        }
+
+//Clubmemebr
+
+
+  function insertClubMember() {
+            const ClubMember_firstName = document.getElementById("ClubMember_firstName").value;
+            const ClubMember_lastName = document.getElementById("ClubMember_lastName").value;
+            const ClubMember_FamilyMemberID = document.getElementById("ClubMember_FamilyMemberID").value;
+            const ClubMember_ssn = document.getElementById("ClubMember_ssn").value;
+            const ClubMember_location_id = document.getElementById("ClubMember_location_id").value;
+            const ClubMember_medicareCard = document.getElementById("ClubMember_medicareCard").value;
+
+            fetch('http://localhost:5000/insertClubMember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ClubMember_firstName,
+                    ClubMember_lastName ,
+                    ClubMember_FamilyMemberID ,
+                    ClubMember_ssn ,
+                    ClubMember_location_id ,
+                    ClubMember_medicareCard
+
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('ClubMember inserted successfully');
+            })
+            .catch(error => {
+                console.error('Error inserting ClubMember:', error);
+            });
+        }
+
+
+   // Function to update ClubMember
+        function updateClubMember() {
+            const ClubMember_update_ID = document.getElementById("ClubMember_update_ID").value;
+            const ClubMember_updateHeight = document.getElementById("ClubMember_updateHeight").value;
+            const ClubMember_updateWeight = document.getElementById("ClubMember_updateWeight").value;
+
+            fetch('http://localhost:5000/updateClubMember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ClubMember_update_ID,
+                    ClubMember_updateHeight,
+					ClubMember_updateWeight
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('ClubMember updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating ClubMember:', error);
+            });
+        }
+
+        // Function to delete ClubMember
+        function deleteClubMember() {
+            const deleteClubMemberID = document.getElementById("deleteClubMemberID").value;
+
+            fetch('http://localhost:5000/deleteClubMember', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    deleteClubMemberID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('ClubMember deleted successfully');
+            })
+            .catch(error => {
+                console.error('Error deleting ClubMember:', error);
+            });
+        }
+
+
+
+// teamformations
+
+  function insertTeamFormation() {
+            const TeamFormation_Team1ID_insert = document.getElementById("TeamFormation_Team1ID_insert").value;
+            const TeamFormation_SessionTypeID_insert = document.getElementById("TeamFormation_SessionTypeID_insert").value;
+            const TeamFormation_SessionDate = document.getElementById("TeamFormation_SessionDate").value;
+            const TeamFormation_StartTime = document.getElementById("TeamFormation_StartTime").value;
+            const TeamFormation_EndTime = document.getElementById("TeamFormation_EndTime").value;
+            const TeamFormation_LocationID_insert = document.getElementById("TeamFormation_LocationID_insert").value;
+            const TeamFormation_Team1Score_insert = document.getElementById("TeamFormation_Team1Score_insert").value;
+
+            fetch('http://localhost:5000/insertTeamFormation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+
+				TeamFormation_Team1ID_insert ,
+				TeamFormation_SessionTypeID_insert,
+				TeamFormation_SessionDate ,
+				TeamFormation_StartTime,
+				TeamFormation_EndTime,
+				TeamFormation_LocationID_insert ,
+				TeamFormation_Team1Score_insert
+
+
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('TeamFormation inserted successfully');
+            })
+            .catch(error => {
+                console.error('Error inserting TeamFormation:', error);
+            });
+        }
+
+
+   // Function to update TeamFormation
+        function updateTeamFormation() {
+            const TeamFormation_FormationID = document.getElementById("TeamFormation_FormationID").value;
+            const TeamFormation_Team1Score = document.getElementById("TeamFormation_Team1Score").value;
+            const TeamFormation_SessionTypeID = document.getElementById("TeamFormation_SessionTypeID").value;
+            const TeamFormation_LocationID = document.getElementById("TeamFormation_LocationID").value;
+
+            fetch('http://localhost:5000/updateTeamFormation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+
+				TeamFormation_FormationID ,
+				TeamFormation_Team1Score ,
+				TeamFormation_SessionTypeID,
+				TeamFormation_LocationID
+
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('TeamFormation updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating TeamFormation:', error);
+            });
+        }
+
+        // Function to delete TeamFormation
+        function deleteTeamFormation() {
+            const deleteTeamFormationID = document.getElementById("deleteTeamFormationID").value;
+
+            fetch('http://localhost:5000/deleteTeamFormation', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    deleteTeamFormationID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('TeamFormation deleted successfully');
+            })
+            .catch(error => {
+                console.error('Error deleting TeamFormation:', error);
+            });
+        }
+
+//teamformation players
+// TeamFormationPlayerss
+
+  function insertTeamFormationPlayers() {
+            const TeamFormationPlayers_FormationID = document.getElementById("TeamFormationPlayers_FormationID").value;
+            const TeamFormationPlayers_TeamID = document.getElementById("TeamFormationPlayers_TeamID").value;
+            const TeamFormationPlayers_MemberID = document.getElementById("TeamFormationPlayers_MemberID").value;
+            const TeamFormationPlayers_RoleID = document.getElementById("TeamFormationPlayers_RoleID").value;
+
+            fetch('http://localhost:5000/insertTeamFormationPlayers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+
+				TeamFormationPlayers_FormationID ,
+				TeamFormationPlayers_TeamID,
+				TeamFormationPlayers_MemberID ,
+				TeamFormationPlayers_RoleID
+
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('TeamFormationPlayers inserted successfully');
+            })
+            .catch(error => {
+                console.error('Error inserting TeamFormationPlayers:', error);
+            });
+        }
+
+
+   // Function to update TeamFormationPlayers
+        function updateTeamFormationPlayers() {
+            const TeamFormationPlayers_update_ID = document.getElementById("TeamFormationPlayers_update_ID").value;
+            const TeamFormationPlayers_update_Member_ID = document.getElementById("TeamFormationPlayers_update_Member_ID").value;
+            const TeamFormationPlayers_updateRole = document.getElementById("TeamFormationPlayers_updateRole").value;
+
+            fetch('http://localhost:5000/updateTeamFormationPlayers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+
+				TeamFormationPlayers_update_ID ,
+				TeamFormationPlayers_update_Member_ID ,
+				TeamFormationPlayers_updateRole
+
+
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('TeamFormationPlayers updated successfully');
+            })
+            .catch(error => {
+                console.error('Error updating TeamFormationPlayers:', error);
+            });
+        }
+
+        // Function to delete TeamFormationPlayers
+        function deleteTeamFormationPlayers() {
+            const deleteTeamFormationPlayersID = document.getElementById("deleteTeamFormationPlayersID").value;
+            const deleteTeamFormationMemberID = document.getElementById("deleteTeamFormationMemberID").value;
+
+            fetch('http://localhost:5000/deleteTeamFormationPlayers', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    deleteTeamFormationPlayersID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('TeamFormationPlayers deleted successfully');
+            })
+            .catch(error => {
+                console.error('Error deleting TeamFormationPlayers:', error);
+            });
+        }
+
+
+
+
+    </script>
+</head>
+<body>
+    <h1>MYVC Database Tables</h1>
+    <div>
+        <!-- Buttons for tables -->
+        <button onclick="displayData('get_table', 'Period')">Period</button>
+        <button onclick="displayData('get_table', 'Locations')">Locations</button>
+        <button onclick="displayData('get_table', 'CommonInfo')">CommonInfo</button>
+        <button onclick="displayData('get_table', 'Personnel')">Personnel</button>
+        <button onclick="displayData('get_table', 'Personnel_Assignments')">Personnel Assignments</button>
+        <button onclick="displayData('get_table', 'FamilyMembers')">Family Members</button>
+        <button onclick="displayData('get_table', 'ClubMembers')">Club Members</button>
+        <button onclick="displayData('get_table', 'Memberships')">Memberships</button>
+        <button onclick="displayData('get_table', 'Teams')">Teams</button>
+        <button onclick="displayData('get_table', 'ClubMembers_Teams')">Club Members Teams</button>
+        <button onclick="displayData('get_table', 'Payments')">Payments</button>
+        <button onclick="displayData('get_table', 'TeamFormations')">TeamFormations</button>
+        <button onclick="displayData('get_table', 'TeamFormationPlayers')">Team Formation Players</button>
+        <button onclick="displayData('get_table', 'EmailLogs')">Email Logs</button>
+        <button onclick="displayData('get_table', 'SecondaryFamilyMembers')">Secondary Family Members</button>
+        <button onclick="displayData('get_table', 'ClubMembers_Locations')">Club Members Locations</button>
+    </div>
+    <hr>
+
+
+
+<div>
+    <h2>Insert New Location</h2>
+
+    <label for="type">Type:</label>
+    <input type="text" id="type" name="type"><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address"><br>
+
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city"><br>
+
+    <label for="province">Province:</label>
+    <input type="text" id="province" name="province"><br>
+
+    <label for="postalCode">Postal Code:</label>
+    <input type="text" id="postalCode" name="postalCode"><br>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" name="phoneNumber"><br>
+
+    <label for="webAddress">Web Address:</label>
+    <input type="text" id="webAddress" name="webAddress"><br>
+
+    <label for="maxCapacity">Max Capacity:</label>
+    <input type="number" id="maxCapacity" name="maxCapacity"><br><br>
+
+    <button onclick="insertLocation()">Insert</button>
+
+
+
+<h2>Update Location</h2>
+
+<label for="update_locationID">Target Location ID:</label>
+<input type="text" id="update_locationID" name="update_locationID"><br>
+
+<label for="update_name">Name:</label>
+<input type="text" id="update_name" name="update_name"><br>
+
+<label for="update_address">Address:</label>
+<input type="text" id="update_address" name="update_address"><br>
+
+<label for="update_city">City:</label>
+<input type="text" id="update_city" name="update_city"><br>
+
+<label for="update_maxCapacity">Max Capacity:</label>
+<input type="number" id="update_maxCapacity" name="update_maxCapacity"><br><br>
+
+<button type="button" onclick="updateLocation()">Update</button>
+
+<h2>Delete Location by ID</h2>
+<label for="locationId">Enter Location ID:</label>
+<input type="number" id="locationId" name="locationId">
+<button onclick="deleteLocation()">Delete</button>
+
+</div>
+
+
+    <hr>
+    <hr>
+
+
+
+
+
+
+    <div>
+    <h1>Personnel Management</h1>
+
+    <!-- Insert Personnel -->
+    <h2>Insert New Personnel</h2>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName"><br>
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName"><br>
+
+    <label for="ssn">SSN:</label>
+    <input type="text" id="ssn" name="ssn"><br>
+
+    <label for="medicareCard">Medicare Card Number:</label>
+    <input type="text" id="medicareCard" name="medicareCard"><br>
+
+    <label for="personale_location_id">location id:</label>
+    <input type="text" id="personale_location_id" name="personale_location_id"><br>
+
+    <button onclick="insertPersonnel()">Insert</button>
+
+    <hr>
+
+    <!-- Update Personnel -->
+    <h2>Update Personnel</h2>
+
+    <label for="update_ID">Target Personnel ID:</label>
+    <input type="text" id="update_ID" name="update_ID"><br>
+
+    <label for="updateRole">New Role:</label>
+    <input type="text" id="updateRole" name="updateRole"><br>
+
+    <button type="button" onclick="updatePersonnel()">Update</button>
+
+    <hr>
+
+    <!-- Delete Personnel -->
+    <h2>Delete Personnel by ID</h2>
+
+    <label for="deletePersonnelID">Enter Personnel ID:</label>
+    <input type="number" id="deletePersonnelID" name="deletePersonnelID"><br>
+
+    <button onclick="deletePersonnel()">Delete</button>
+    </div>
+    <hr>
+    <hr>
+
+    <div>
+    <h1>FamilyMember Management</h1>
+
+    <!-- Insert Personnel -->
+    <h2>Insert New FamilyMember</h2>
+    <label for="FamilyMember_firstName">First Name:</label>
+    <input type="text" id="FamilyMember_firstName" name="FamilyMember_firstName"><br>
+
+    <label for="FamilyMember_lastName">Last Name:</label>
+    <input type="text" id="FamilyMember_lastName" name="FamilyMember_lastName"><br>
+
+    <label for="FamilyMember_ssn">SSN:</label>
+    <input type="text" id="FamilyMember_ssn" name="ssn"><br>
+
+    <label for="FamilyMember_medicareCard">Medicare Card Number:</label>
+    <input type="text" id="FamilyMember_medicareCard" name="FamilyMember_medicareCard"><br>
+
+    <label for="FamilyMember_Relationship">Relationship:</label>
+    <input type="text" id="FamilyMember_Relationship" name="FamilyMember_Relationship"><br>
+
+    <label for="FamilyMember_location_id">location id:</label>
+    <input type="text" id="FamilyMember_location_id" name="FamilyMember_location_id"><br>
+
+    <button onclick="insertFamilyMember()">Insert</button>
+
+    <hr>
+
+    <h2>Update FamilyMember</h2>
+
+    <label for="FamilyMember_update_ID">Target Family member ID:</label>
+    <input type="text" id="FamilyMember_update_ID" name="FamilyMember_update_ID"><br>
+
+    <label for="FamilyMember_updateRole">New Role:</label>
+    <input type="text" id="FamilyMember_updateRole" name="FamilyMember_updateRole"><br>
+
+    <button type="button" onclick="updateFamilyMember()">Update</button>
+
+    <hr>
+
+    <!-- Delete Personnel -->
+    <h2>Delete FamilyMember by ID</h2>
+
+    <label for="deleteFamilyMemberID">Enter FamilyMember ID:</label>
+    <input type="number" id="deleteFamilyMemberID" name="deleteFamilyMemberID"><br>
+
+    <button onclick="deleteFamilyMember()">Delete</button>
+    </div>
+
+    <hr>
+    <hr>
+  <div>
+    <h1>ClubMember Management</h1>
+
+    <!-- Insert Personnel -->
+    <h2>Insert New ClubMember</h2>
+    <label for="ClubMember_firstName">First Name:</label>
+    <input type="text" id="ClubMember_firstName" name="ClubMember_firstName"><br>
+
+    <label for="ClubMember_lastName">Last Name:</label>
+    <input type="text" id="ClubMember_lastName" name="ClubMember_lastName"><br>
+
+    <label for="ClubMember_ssn">SSN:</label>
+    <input type="text" id="ClubMember_ssn" name="ssn"><br>
+
+    <label for="ClubMember_medicareCard">Medicare Card Number:</label>
+    <input type="text" id="ClubMember_medicareCard" name="ClubMember_medicareCard"><br>
+
+
+    <label for="ClubMember_FamilyMemberID">FamilyMemberID:</label>
+    <input type="text" id="ClubMember_FamilyMemberID" name="ClubMember_FamilyMemberID"><br>
+
+    <label for="ClubMember_location_id">location id:</label>
+    <input type="text" id="ClubMember_location_id" name="ClubMember_location_id"><br>
+
+    <button onclick="insertClubMember()">Insert</button>
+
+    <hr>
+
+    <h2>Update ClubMember</h2>
+
+    <label for="ClubMember_update_ID">Target ClubMember ID:</label>
+    <input type="text" id="ClubMember_update_ID" name="ClubMember_update_ID"><br>
+
+    <label for="ClubMember_updateHeight">New Height:</label>
+    <input type="text" id="ClubMember_updateHeight" name="ClubMember_updateHeight"><br>
+
+    <label for="ClubMember_updateWeight">New Weight:</label>
+    <input type="text" id="ClubMember_updateWeight" name="ClubMember_updateWeight"><br>
+
+    <button type="button" onclick="updateClubMember()">Update</button>
+
+    <hr>
+
+    <!-- Delete Personnel -->
+    <h2>Delete ClubMember by ID</h2>
+
+    <label for="deleteClubMemberID">Enter ClubMember ID:</label>
+    <input type="number" id="deleteClubMemberID" name="deleteClubMemberID"><br>
+
+    <button onclick="deleteClubMember()">Delete</button>
+    </div>
+
+    <hr>
+    <hr>
+ <div>
+    <h1>TeamFormation Management</h1>
+
+	<label for="TeamFormation_Team1ID_insert">Team1ID:</label>
+	<input type="text" id="TeamFormation_Team1ID_insert" name="TeamFormation_Team1ID_insert"><br>
+
+	<label for="TeamFormation_SessionTypeID_insert">SessionTypeID:</label>
+	<input type="text" id="TeamFormation_SessionTypeID_insert" name="TeamFormation_SessionTypeID_insert"><br>
+
+	<label for="TeamFormation_SessionDate">SessionDate:</label>
+	<input type="date" id="TeamFormation_SessionDate" name="TeamFormation_SessionDate"><br>
+
+	<label for="TeamFormation_StartTime">StartTime:</label>
+	<input type="time" id="TeamFormation_StartTime" name="TeamFormation_StartTime"><br>
+
+	<label for="TeamFormation_EndTime">EndTime:</label>
+	<input type="time" id="TeamFormation_EndTime" name="TeamFormation_EndTime"><br>
+
+	<label for="TeamFormation_LocationID_insert">LocationID:</label>
+	<input type="text" id="TeamFormation_LocationID_insert" name="TeamFormation_LocationID_insert"><br>
+
+	<label for="TeamFormation_Team1Score_insert">Team1Score:</label>
+	<input type="number" id="TeamFormation_Team1Score_insert" name="TeamFormation_Team1Score_insert" value="0"><br>
+
+	<button onclick="insertTeamFormation()">Insert</button>
+
+    <hr>
+
+    <h2>Update TeamFormation</h2>
+
+    <label for="TeamFormation_FormationID">Target TeamFormation ID:</label>
+    <input type="text" id="TeamFormation_FormationID" name="TeamFormation_FormationID"><br>
+
+	<label for="TeamFormation_Team1Score">Team1Score:</label>
+	<input type="text" id="TeamFormation_Team1Score" name="TeamFormation_Team1Score" ><br>
+
+	<label for="TeamFormation_SessionTypeID">Team session type:</label>
+	<input type="text" id="TeamFormation_SessionTypeID" name="TeamFormation_SessionTypeID" ><br>
+
+	<label for="TeamFormation_LocationID">Location ID:</label>
+	<input type="text" id="TeamFormation_LocationID" name="TeamFormation_LocationID"><br>
+
+    <button type="button" onclick="updateTeamFormation()">Update</button>
+
+    <hr>
+
+    <!-- Delete Personnel -->
+    <h2>Delete TeamFormation by ID</h2>
+
+    <label for="deleteTeamFormationID">Enter TeamFormation ID:</label>
+    <input type="number" id="deleteTeamFormationID" name="deleteTeamFormationID"><br>
+
+    <button onclick="deleteTeamFormation()">Delete</button>
+    </div>
+
+    <hr>
+    <hr>
+    <div>
+         <h1>TeamFormationPlayers Management</h1>
+
+    <!-- Insert Personnel -->
+    <h2>Insert New TeamFormationPlayers</h2>
+    <label for="TeamFormationPlayers_FormationID">FormationID:</label>
+    <input type="text" id="TeamFormationPlayers_FormationID" name="TeamFormationPlayers_FormationID"><br>
+
+    <label for="TeamFormationPlayers_TeamID">TeamID:</label>
+    <input type="text" id="TeamFormationPlayers_TeamID" name="TeamFormationPlayers_TeamID"><br>
+
+    <label for="TeamFormationPlayers_MemberID">MemberID:</label>
+    <input type="text" id="TeamFormationPlayers_MemberID" name="TeamFormationPlayers_MemberID"><br>
+
+    <label for="TeamFormationPlayers_RoleID">RoleID:</label>
+    <input type="text" id="TeamFormationPlayers_RoleID" name="TeamFormationPlayers_RoleID"><br>
+
+    <button onclick="insertTeamFormationPlayers()">Insert</button>
+
+    <hr>
+
+    <h2>Update TeamFormationPlayers</h2>
+
+    <label for="TeamFormationPlayers_update_ID">FormationID:</label>
+    <input type="text" id="TeamFormationPlayers_update_ID" name="TeamFormationPlayers_update_ID"><br>
+
+    <label for="TeamFormationPlayers_update_Member_ID">Member ID:</label>
+    <input type="text" id="TeamFormationPlayers_update_Member_ID" name="TeamFormationPlayers_update_Member_ID"><br>
+
+    <label for="TeamFormationPlayers_updateRole">New RoleID:</label>
+    <input type="text" id="TeamFormationPlayers_updateRole" name="TeamFormationPlayers_updateRole"><br>
+
+    <button type="button" onclick="updateTeamFormationPlayers()">Update</button>
+
+    <hr>
+
+    <h2>Delete TeamFormationPlayers by ID</h2>
+
+    <label for="deleteTeamFormationPlayersID">Enter Formation ID:</label>
+    <input type="number" id="deleteTeamFormationPlayersID" name="deleteTeamFormationPlayersID"><br>
+
+    <label for="deleteTeamFormationMemberID">Enter Member ID:</label>
+    <input type="number" id="deleteTeamFormationMemberID" name="deleteTeamFormationMemberID"><br>
+
+    <button onclick="deleteTeamFormationPlayers()">Delete</button>
+    </div>
+    <p id="result"></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <hr>
+    <div>
+        <!-- Buttons for queries -->
+        <button onclick="displayData('query', 'Q7')">Q7 - Family Members and Location</button>
+        <button onclick="displayData('query', 'Q8')">Q8 - Family Members and Club Member Info</button>
+        <button onclick="displayData('query', 'Q9')">Q9 - Team Formation and Players</button>
+        <button onclick="displayData('query', 'Q10')">Q10 - Family Members in Team Formations</button>
+        <button onclick="displayData('query', 'Q11')">Q11 - Member Payment Details</button>
+        <button onclick="displayData('query', 'Q12')">Q12 - Coach Assignments and Sessions</button>
+        <button onclick="displayData('query', 'Q13')">Q13 - Club Member Details by Location</button>
+        <button onclick="displayData('query', 'Q14')">Q14 - Player Performance</button>
+        <button onclick="displayData('query', 'Q15')">Q15 - Match Results</button>
+        <button onclick="displayData('query', 'Q16')">Q16 - Team Sessions</button>
+        <button onclick="displayData('query', 'Q17')">Q17 - Family Relationship Info</button>
+        <button onclick="displayData('query', 'Q18')">Q18 - Players and Coaches in Sessions</button>
+    </div>
+
+    <div id="tableDisplay"></div>
+</body>
+</html>
